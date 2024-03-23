@@ -878,7 +878,6 @@ export type JobSettingsDto = {
 };
 export type SystemConfigJobDto = {
     backgroundTask: JobSettingsDto;
-    duplicateDetection: JobSettingsDto;
     faceDetection: JobSettingsDto;
     library: JobSettingsDto;
     metadataExtraction: JobSettingsDto;
