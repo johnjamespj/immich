@@ -37,5 +37,6 @@ export const newAssetRepositoryMock = (): Mocked<IAssetRepository> => {
     getAssetIdByTag: vitest.fn(),
     getAllForUserFullSync: vitest.fn(),
     getChangedDeltaSync: vitest.fn(),
+    getDuplicates: vitest.fn(),
   };
 };
