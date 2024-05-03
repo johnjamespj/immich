@@ -266,8 +266,7 @@
               {personName}
             {/await}
           {:else if key === 'assetId'}
-            <!-- Show only the first 8 characters of the asset ID, links to the image -->
-            <a href={`${AppRoute.PHOTOS}/${value}`} class="text-blue-200">{value.slice(0, 8)}</a>
+            {value.slice(0, 8)}
           {:else}
             {value}
           {/if}
