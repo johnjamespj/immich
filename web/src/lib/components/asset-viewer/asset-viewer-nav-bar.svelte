@@ -104,9 +104,9 @@
     dispatch(eventName);
   };
 
-  const onSimilarImagesClick = () => {
+  const onSimilarImagesClick = async () => {
     const params = getMetadataSearchQuery({ assetId: asset.id });
-    goto(`${AppRoute.SEARCH}?${params}`);
+    await goto(`${AppRoute.SEARCH}?${params}`);
   };
 </script>
 

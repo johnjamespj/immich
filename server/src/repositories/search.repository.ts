@@ -186,7 +186,8 @@ export class SearchRepository implements ISearchRepository {
       await manager.query(this.getRuntimeConfig(pagination.size));
       results = await paginatedBuilder<AssetEntity>(builder, {
         mode: PaginationMode.LIMIT_OFFSET,
-        skip: (pagination.page - 1) * pagination.size,
+        // here we skip the first result, which is the query image itself
+        skip: (pagination.page - 1) * pagination.size + 1,
         take: pagination.size,
       });
     });
