@@ -32,8 +32,12 @@
     mdiPlaySpeed,
     mdiPresentationPlay,
     mdiShareVariantOutline,
+    mdiImageSearch,
   } from '@mdi/js';
   import { createEventDispatcher } from 'svelte';
+  import { goto } from '$app/navigation'
+  import { getMetadataSearchQuery } from '$lib/utils/metadata-search';
+  import { AppRoute } from '$lib/constants';
   import ContextMenu from '../shared-components/context-menu/context-menu.svelte';
   import MenuOption from '../shared-components/context-menu/menu-option.svelte';
 
@@ -98,6 +102,11 @@
   const onMenuClick = (eventName: MenuItemEvent) => {
     isShowAssetOptions = false;
     dispatch(eventName);
+  };
+
+  const onSimilarImagesClick = () => {
+    const params = getMetadataSearchQuery({ assetId: asset.id });
+    goto(`${AppRoute.SEARCH}?${params}`);
   };
 </script>
 
@@ -240,6 +249,11 @@
                   text="Set as profile picture"
                 />
               {/if}
+              <MenuOption
+                  icon={mdiImageSearch}
+                  on:click={onSimilarImagesClick}
+                  text="Seach similar images"
+              />
               <MenuOption
                 on:click={() => dispatch('toggleArchive')}
                 icon={asset.isArchived ? mdiArchiveArrowUpOutline : mdiArchiveArrowDownOutline}

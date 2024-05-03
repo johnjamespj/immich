@@ -24,6 +24,7 @@
     type AssetResponseDto,
     searchSmart,
     searchMetadata,
+    searchImage,
     getPerson,
     type SmartSearchDto,
     type MetadataSearchDto,
@@ -129,9 +130,14 @@
     };
 
     try {
+      // const { albums, assets } =
+      //   'query' in searchDto && $featureFlags.smartSearch
+      //     ? await searchSmart({ smartSearchDto: searchDto })
+      //     : await searchMetadata({ metadataSearchDto: searchDto });
       const { albums, assets } =
         'query' in searchDto && $featureFlags.smartSearch
           ? await searchSmart({ smartSearchDto: searchDto })
+          : 'assetId' in searchDto ? await searchImage({ reverseImageSearchDto: searchDto }) 
           : await searchMetadata({ metadataSearchDto: searchDto });
 
       searchResultAlbums.push(...albums.items);
