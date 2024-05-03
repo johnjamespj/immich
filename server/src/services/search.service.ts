@@ -12,6 +12,7 @@ import {
   SearchSuggestionRequestDto,
   SearchSuggestionType,
   SmartSearchDto,
+  ReverseImageSearchDto,
   mapPlaces,
 } from 'src/dtos/search.dto';
 import { AssetOrder } from 'src/entities/album.entity';
@@ -113,6 +114,21 @@ export class SearchService {
     const { hasNextPage, items } = await this.searchRepository.searchSmart(
       { page, size },
       { ...dto, userIds, embedding },
+    );
+
+    return this.mapResponse(items, hasNextPage ? (page + 1).toString() : null);
+  }
+
+  async searchImage(auth: AuthDto, dto: ReverseImageSearchDto): Promise<SearchResponseDto> {
+    await this.configCore.requireFeature(FeatureFlag.SMART_SEARCH);
+    const assetId = dto.assetId;
+    const userIds = await this.getUserIdsToSearch(auth);
+
+    const page = dto.page ?? 1;
+    const size = dto.size || 100;
+    const { hasNextPage, items } = await this.searchRepository.searchImage(
+      { page, size },
+      { ...dto, userIds, assetId },
     );
 
     return this.mapResponse(items, hasNextPage ? (page + 1).toString() : null);

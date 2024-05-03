@@ -16,6 +16,7 @@ import {
   ISearchRepository,
   SearchPaginationOptions,
   SmartSearchOptions,
+  ReverseImageSearchOptions,
 } from 'src/interfaces/search.interface';
 import { asVector, searchAssetBuilder } from 'src/utils/database';
 import { Instrumentation } from 'src/utils/instrumentation';
@@ -133,6 +134,54 @@ export class SearchRepository implements ISearchRepository {
         .andWhere('asset.ownerId IN (:...userIds )')
         .orderBy('search.embedding <=> :embedding')
         .setParameters({ userIds, embedding: asVector(embedding) });
+
+      await manager.query(this.getRuntimeConfig(pagination.size));
+      results = await paginatedBuilder<AssetEntity>(builder, {
+        mode: PaginationMode.LIMIT_OFFSET,
+        skip: (pagination.page - 1) * pagination.size,
+        take: pagination.size,
+      });
+    });
+
+    return results;
+  }
+
+  @GenerateSql({
+    params: [
+      { page: 1, size: 100 },
+      {
+        takenAfter: DummyValue.DATE,
+        assetId: DummyValue.UUID,
+        lensModel: DummyValue.STRING,
+        withStacked: true,
+        isFavorite: true,
+        userIds: [DummyValue.UUID],
+      },
+    ],
+  })
+  async searchImage(
+    pagination: SearchPaginationOptions,
+    { assetId, userIds, personIds, ...options }: ReverseImageSearchOptions,
+  ): Paginated<AssetEntity> {
+    let results: PaginationResult<AssetEntity> = { items: [], hasNextPage: false };
+
+    await this.assetRepository.manager.transaction(async (manager) => {
+      let builder = manager.createQueryBuilder(AssetEntity, 'asset');
+
+      if (personIds?.length) {
+        const assetFaceBuilder = manager.createQueryBuilder(AssetFaceEntity, 'asset_face');
+        const cte = this.createPersonFilter(assetFaceBuilder, personIds);
+        builder
+          .addCommonTableExpression(cte, 'asset_face_ids')
+          .innerJoin('asset_face_ids', 'a', 'a."assetId" = asset.id');
+      }
+
+      builder = searchAssetBuilder(builder, options);
+      builder
+        .innerJoin('asset.smartSearch', 'search')
+        .andWhere('asset.ownerId IN (:...userIds )')
+        .orderBy('search.embedding <=> (SELECT embedding FROM smart_search WHERE "assetId" = :assetId LIMIT 1)')
+        .setParameters({ userIds, assetId: assetId });
 
       await manager.query(this.getRuntimeConfig(pagination.size));
       results = await paginatedBuilder<AssetEntity>(builder, {

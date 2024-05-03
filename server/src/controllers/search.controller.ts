@@ -12,6 +12,7 @@ import {
   SearchResponseDto,
   SearchSuggestionRequestDto,
   SmartSearchDto,
+  ReverseImageSearchDto,
 } from 'src/dtos/search.dto';
 import { Auth, Authenticated } from 'src/middleware/auth.guard';
 import { SearchService } from 'src/services/search.service';
@@ -32,6 +33,12 @@ export class SearchController {
   @HttpCode(HttpStatus.OK)
   searchSmart(@Auth() auth: AuthDto, @Body() dto: SmartSearchDto): Promise<SearchResponseDto> {
     return this.service.searchSmart(auth, dto);
+  }
+
+  @Post('image')
+  @HttpCode(HttpStatus.OK)
+  searchImage(@Auth() auth: AuthDto, @Body() dto: ReverseImageSearchDto): Promise<SearchResponseDto> {
+    return this.service.searchImage(auth, dto);
   }
 
   @Get('explore')

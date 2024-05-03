@@ -200,6 +200,12 @@ export class SmartSearchDto extends BaseSearchDto {
   query!: string;
 }
 
+export class ReverseImageSearchDto extends BaseSearchDto {
+  @IsString()
+  @IsNotEmpty()
+  assetId!: string;
+}
+
 export class SearchPlacesDto {
   @IsString()
   @IsNotEmpty()

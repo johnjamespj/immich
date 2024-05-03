@@ -112,6 +112,10 @@ export interface SearchEmbeddingOptions {
   userIds: string[];
 }
 
+export interface SearchReverseImageOptions {
+  assetId: string;
+}
+
 export interface SearchPeopleOptions {
   personIds?: string[];
 }
@@ -148,6 +152,14 @@ export type SmartSearchOptions = SearchDateOptions &
   SearchUserIdOptions &
   SearchPeopleOptions;
 
+  export type ReverseImageSearchOptions = SearchDateOptions &
+  SearchReverseImageOptions &
+  SearchExifOptions &
+  SearchOneToOneRelationOptions &
+  SearchStatusOptions &
+  SearchUserIdOptions &
+  SearchPeopleOptions;
+
 export interface FaceEmbeddingSearch extends SearchEmbeddingOptions {
   hasPerson?: boolean;
   numResults: number;
@@ -164,6 +176,7 @@ export interface ISearchRepository {
   searchMetadata(pagination: SearchPaginationOptions, options: AssetSearchOptions): Paginated<AssetEntity>;
   searchSmart(pagination: SearchPaginationOptions, options: SmartSearchOptions): Paginated<AssetEntity>;
   searchFaces(search: FaceEmbeddingSearch): Promise<FaceSearchResult[]>;
+  searchImage(pagination: SearchPaginationOptions, options: ReverseImageSearchOptions): Paginated<AssetEntity>;
   upsert(assetId: string, embedding: number[]): Promise<void>;
   searchPlaces(placeName: string): Promise<GeodataPlacesEntity[]>;
   getAssetsByCity(userIds: string[]): Promise<AssetEntity[]>;
