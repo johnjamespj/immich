@@ -32,6 +32,11 @@ void main() {
       // TODO
     });
 
+    //Future<SearchResponseDto> searchImage(ReverseImageSearchDto reverseImageSearchDto) async
+    test('test searchImage', () async {
+      // TODO
+    });
+
     //Future<SearchResponseDto> searchMetadata(MetadataSearchDto metadataSearchDto) async
     test('test searchMetadata', () async {
       // TODO

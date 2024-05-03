@@ -128,6 +128,7 @@ doc/ReactionLevel.md
 doc/ReactionType.md
 doc/RecognitionConfig.md
 doc/ReverseGeocodingStateResponseDto.md
+doc/ReverseImageSearchDto.md
 doc/ScanLibraryDto.md
 doc/SearchAlbumResponseDto.md
 doc/SearchApi.md
@@ -356,6 +357,7 @@ lib/model/reaction_level.dart
 lib/model/reaction_type.dart
 lib/model/recognition_config.dart
 lib/model/reverse_geocoding_state_response_dto.dart
+lib/model/reverse_image_search_dto.dart
 lib/model/scan_library_dto.dart
 lib/model/search_album_response_dto.dart
 lib/model/search_asset_response_dto.dart
@@ -553,6 +555,7 @@ test/reaction_level_test.dart
 test/reaction_type_test.dart
 test/recognition_config_test.dart
 test/reverse_geocoding_state_response_dto_test.dart
+test/reverse_image_search_dto_test.dart
 test/scan_library_dto_test.dart
 test/search_album_response_dto_test.dart
 test/search_api_test.dart

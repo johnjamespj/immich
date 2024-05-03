@@ -184,6 +184,53 @@ class SearchApi {
     return null;
   }
 
+  /// Performs an HTTP 'POST /search/image' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [ReverseImageSearchDto] reverseImageSearchDto (required):
+  Future<Response> searchImageWithHttpInfo(ReverseImageSearchDto reverseImageSearchDto,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/search/image';
+
+    // ignore: prefer_final_locals
+    Object? postBody = reverseImageSearchDto;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [ReverseImageSearchDto] reverseImageSearchDto (required):
+  Future<SearchResponseDto?> searchImage(ReverseImageSearchDto reverseImageSearchDto,) async {
+    final response = await searchImageWithHttpInfo(reverseImageSearchDto,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'SearchResponseDto',) as SearchResponseDto;
+    
+    }
+    return null;
+  }
+
   /// Performs an HTTP 'POST /search/metadata' operation and returns the [Response].
   /// Parameters:
   ///

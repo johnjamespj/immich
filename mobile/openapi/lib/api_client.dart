@@ -402,6 +402,8 @@ class ApiClient {
           return RecognitionConfig.fromJson(value);
         case 'ReverseGeocodingStateResponseDto':
           return ReverseGeocodingStateResponseDto.fromJson(value);
+        case 'ReverseImageSearchDto':
+          return ReverseImageSearchDto.fromJson(value);
         case 'ScanLibraryDto':
           return ScanLibraryDto.fromJson(value);
         case 'SearchAlbumResponseDto':

@@ -609,6 +609,66 @@ export type SearchExploreResponseDto = {
     fieldName: string;
     items: SearchExploreItem[];
 };
+export type ReverseImageSearchDto = {
+    assetId: string;
+    city?: string;
+    country?: string;
+    createdAfter?: string;
+    createdBefore?: string;
+    deviceId?: string;
+    isArchived?: boolean;
+    isEncoded?: boolean;
+    isExternal?: boolean;
+    isFavorite?: boolean;
+    isMotion?: boolean;
+    isNotInAlbum?: boolean;
+    isOffline?: boolean;
+    isReadOnly?: boolean;
+    isVisible?: boolean;
+    lensModel?: string;
+    libraryId?: string;
+    make?: string;
+    model?: string;
+    page?: number;
+    personIds?: string[];
+    size?: number;
+    state?: string;
+    takenAfter?: string;
+    takenBefore?: string;
+    trashedAfter?: string;
+    trashedBefore?: string;
+    "type"?: AssetTypeEnum;
+    updatedAfter?: string;
+    updatedBefore?: string;
+    withArchived?: boolean;
+    withDeleted?: boolean;
+    withExif?: boolean;
+};
+export type SearchFacetCountResponseDto = {
+    count: number;
+    value: string;
+};
+export type SearchFacetResponseDto = {
+    counts: SearchFacetCountResponseDto[];
+    fieldName: string;
+};
+export type SearchAlbumResponseDto = {
+    count: number;
+    facets: SearchFacetResponseDto[];
+    items: AlbumResponseDto[];
+    total: number;
+};
+export type SearchAssetResponseDto = {
+    count: number;
+    facets: SearchFacetResponseDto[];
+    items: AssetResponseDto[];
+    nextPage: string | null;
+    total: number;
+};
+export type SearchResponseDto = {
+    albums: SearchAlbumResponseDto;
+    assets: SearchAssetResponseDto;
+};
 export type MetadataSearchDto = {
     checksum?: string;
     city?: string;
@@ -657,31 +717,6 @@ export type MetadataSearchDto = {
     withExif?: boolean;
     withPeople?: boolean;
     withStacked?: boolean;
-};
-export type SearchFacetCountResponseDto = {
-    count: number;
-    value: string;
-};
-export type SearchFacetResponseDto = {
-    counts: SearchFacetCountResponseDto[];
-    fieldName: string;
-};
-export type SearchAlbumResponseDto = {
-    count: number;
-    facets: SearchFacetResponseDto[];
-    items: AlbumResponseDto[];
-    total: number;
-};
-export type SearchAssetResponseDto = {
-    count: number;
-    facets: SearchFacetResponseDto[];
-    items: AssetResponseDto[];
-    nextPage: string | null;
-    total: number;
-};
-export type SearchResponseDto = {
-    albums: SearchAlbumResponseDto;
-    assets: SearchAssetResponseDto;
 };
 export type PlacesResponseDto = {
     admin1name?: string;
@@ -2130,6 +2165,18 @@ export function getExploreData(opts?: Oazapfts.RequestOpts) {
     }>("/search/explore", {
         ...opts
     }));
+}
+export function searchImage({ reverseImageSearchDto }: {
+    reverseImageSearchDto: ReverseImageSearchDto;
+}, opts?: Oazapfts.RequestOpts) {
+    return oazapfts.ok(oazapfts.fetchJson<{
+        status: 200;
+        data: SearchResponseDto;
+    }>("/search/image", oazapfts.json({
+        ...opts,
+        method: "POST",
+        body: reverseImageSearchDto
+    })));
 }
 export function searchMetadata({ metadataSearchDto }: {
     metadataSearchDto: MetadataSearchDto;
