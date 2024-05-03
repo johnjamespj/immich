@@ -181,6 +181,7 @@
       model: 'Camera model',
       personIds: 'People',
       originalFileName: 'File name',
+      assetId: 'Image ID',
     };
     return keyMap[key] || key;
   }
@@ -264,6 +265,9 @@
             {#await getPersonName(value) then personName}
               {personName}
             {/await}
+          {:else if key === 'assetId'}
+            <!-- Show only the first 8 characters of the asset ID, links to the image -->
+            <a href={`${AppRoute.PHOTOS}/${value}`} class="text-blue-200">{value.slice(0, 8)}</a>
           {:else}
             {value}
           {/if}
